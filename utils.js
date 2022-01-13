@@ -49,6 +49,7 @@ function detectRectangleCollision(rect1, rect2, velocity2) {
   )
   if (!verticalCollision) {
     // If no vertical collision, there can't be a collision at all
+    return null;
   }
 
   // If we got this far, that means there's both an horizontal and a vertical collision. 
