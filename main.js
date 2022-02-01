@@ -6,10 +6,9 @@ const canvasH = canvas.height;
 const refreshRate = 1 / 60;
 
 blocks = createBlocks(numberOfBlock);
-barX = canvasW / 2 - barW / 2;
-barY = canvasH - barH;
-ballX= barX + barW/2;
-ballY = barY - ballRadius; 
+bar = new Bar(new Position(canvasW / 2 - barW / 2, canvasH - barH), barW, barH, '#000' )
+const ballRadius = 10; 
+ball = new Ball(new Position(bar.position.x + barW/2, bar.position.y - ballRadius), ballRadius, '#fff')
 
 
 function drawBackGround() {
@@ -20,12 +19,12 @@ function drawBackGround() {
 
 
 function updateAndDrawScene() {
-  updateBar();
-  updateBall();
+  bar.update();
+  ball.update();
   drawBackGround();
   drawBlocks();
-  drawBall();
-  drawBar();
+  ball.draw();
+  bar.draw();
 }
 setInterval(updateAndDrawScene, refreshRate);
 

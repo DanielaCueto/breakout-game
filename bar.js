@@ -1,23 +1,35 @@
 "use strict";
 
 
-function updateBar() {
-  if (playerPressingRight) {
-    barVX = 60;
-  } else if (playerPressingLeft) {
-    barVX = -60;
-  } else {
-    barVX = 0;
+
+
+
+//class
+
+class Bar{
+  constructor(position, width, height, color){
+    this.position = position; 
+    this.width = width; 
+    this.height = height; 
+    this.color = color; 
   }
-  barX = barX + barVX * refreshRate;
-  if (barX >= canvasW - barW) {
-    barX = canvasW - barW;
-    barVX *= -1;
-  } else if (barX <= 0) {
-    barX = 0;
-    barVX *= -1;
+  draw(){
+    drawRectangle(context, this.position, this.width, this.height, this.color)
   }
-}
-function drawBar() {
-  drawRectangle(context, barX, barY, barW, barH, "#000");
+  update(){
+    let barVX; 
+    if (playerPressingRight) {
+      barVX = 60;
+    } else if (playerPressingLeft) {
+      barVX = -60;
+    } else {
+      barVX = 0;
+    }
+    this.position = this.position.move(barVX * refreshRate, 0) ;
+    if (this.position.x >= canvasW - barW) {
+      this.position.x = canvasW - barW;
+    } else if (this.position.x <= 0) {
+      this.position.x = 0;
+    }
+  }
 }

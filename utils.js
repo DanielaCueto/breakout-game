@@ -1,14 +1,14 @@
 "use-strict";
 
-function drawRectangle(context, x, y, w, h, color) {
+function drawRectangle(context, position, w, h, color) {
   context.fillStyle = color;
-  context.fillRect(x, y, w, h);
+  context.fillRect(position.x, position.y, w, h);
 }
 
-function drawCircle(context, x, y, r, color) {
+function drawCircle(context, position,  r, color) {
   context.fillStyle = color;
   context.beginPath();
-  context.arc(x, y, r, 0, 2 * Math.PI);
+  context.arc(position.x, position.y, r, 0, 2 * Math.PI);
   context.fill();
 }
 
@@ -65,12 +65,12 @@ function detectRectangleCollision(rect1, rect2, velocity2) {
   if (velocity2.vx > 0) {
     // if moving from left to right, new x2 position is such that x2 + w2 = x1
     collisionFreeX2 = rect1.x - rect2.w;
-  } 
-  else if (velocity2.vx < 0) {
+  } else if (velocity2.vx < 0) {
     // else we're moving from right to left, new x2 position is such that x2 = x1 + w1
     collisionFreeX2 = rect1.x + rect1.w;
   }
-  let rewindTimeX = velocity2.vx === 0 ? Infinity : ((rect2.x - collisionFreeX2) / velocity2.vx);
+  let rewindTimeX =
+    velocity2.vx === 0 ? Infinity : (rect2.x - collisionFreeX2) / velocity2.vx;
 
   let collisionFreeY2 = rect2.y;
   if (velocity2.vy > 0) {
@@ -80,7 +80,8 @@ function detectRectangleCollision(rect1, rect2, velocity2) {
     // else we're moving from bottom to top, new y2 position is such that y2 = y1 + h1
     collisionFreeY2 = rect1.y + rect1.h;
   }
-  let rewindTimeY = velocity2.vy === 0 ? Infinity : ((rect2.y - collisionFreeY2) / velocity2.vy);
+  let rewindTimeY =
+    velocity2.vy === 0 ? Infinity : (rect2.y - collisionFreeY2) / velocity2.vy;
   let minRewindTime = Math.min(rewindTimeX, rewindTimeY);
   let x2Adjustment = 0;
   let y2Adjustment = 0;
@@ -102,3 +103,36 @@ function detectRectangleCollision(rect1, rect2, velocity2) {
     },
   };
 }
+
+//Clases:
+
+class Position {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  
+  move(deltaX, deltaY) {
+    return new Position(this.x + deltaX, this.y + deltaY);
+  }
+
+  isEqual(position) {
+    return position.x === this.x && position.y === this.y
+  }
+}
+
+class Velocity {
+  constructor(vx, vy) {
+    this.vx = vx;
+    this.vy = vy;
+  }
+  
+  add(deltaX, deltaY) {
+    return new Velocity(this.vx + deltaX, this.vy + deltaY);
+  }
+
+  isEqual(velocity) {
+    return velocity.vx === this.vx && velocity.vy === this.vy
+  }
+}
+
